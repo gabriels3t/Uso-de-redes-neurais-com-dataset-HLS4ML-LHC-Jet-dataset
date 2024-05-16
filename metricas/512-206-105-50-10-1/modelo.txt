@@ -1,0 +1,28 @@
+class Classification(nn.Module):
+  def __init__(self,entrada):
+    super().__init__()
+
+
+    self.layers = nn.Sequential(
+        nn.Linear(entrada,512),
+        nn.Sigmoid(),
+        nn.Linear(512,206),
+        nn.Sigmoid(),
+        nn.Linear(206,105),
+        nn.Sigmoid(),
+        nn.Linear(105,50),
+        nn.Sigmoid(),
+        nn.Linear(50,25),
+        nn.Sigmoid(),
+        nn.Linear(25,10),
+        nn.Sigmoid(),
+        nn.Linear(10,1),
+        nn.Sigmoid()
+    )
+  def forward(self,x):
+    return self.layers(x)
+
+learning rate lr=1e-5
+
+epocas :
+vezes_treinando = 3000
