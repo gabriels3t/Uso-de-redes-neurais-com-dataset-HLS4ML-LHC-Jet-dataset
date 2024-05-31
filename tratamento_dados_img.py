@@ -76,19 +76,16 @@ def salvar_tensor_csv(csv_path, tensor_path, dtypes):
 
 
 # Executando
-path_train, path_test = carregar_dados("dados")
-salvar_numpy_array(loadfiles_np(path_train, -1), 'dados/hcal_train.npy')
-salvar_numpy_array(loadfiles_np(path_test, -1), 'dados/hcal_test.npy')
+path_train, path_test = carregar_dados("data")
 
-path_test = "dados/hcal_test.npy"
-juntar_dados_imagem_alvo(path_test, "dados/target_test_raw.csv", 'dados/teste.csv')
+juntar_dados_imagem_alvo(path_test, "data/target_test_raw.csv", 'data/teste.csv')
 
-path_treino= "dados/hcal_train.npy"
-juntar_dados_imagem_alvo(path_treino, "dados/target_train_raw.csv", 'dados/treino.csv')
+path_treino= "data/hcal_train.npy"  
+juntar_dados_imagem_alvo(path_train, "data/target_train_raw.csv", 'data/treino.csv')
 
 dtypes = {f'{i}': 'float32' for i in range(0, 10000)}
 dtypes['Unnamed: 0'] = 'int64'
 dtypes['Classe'] = 'int64'
 
-salvar_tensor_csv("dados/treino.csv", "dados/treino.pt", dtypes)
-salvar_tensor_csv("dados/teste.csv", "dados/teste.pt", dtypes)
+salvar_tensor_csv("data/treino.csv", "data/treino.pt", dtypes)
+salvar_tensor_csv("data/teste.csv", "data/teste.pt", dtypes)

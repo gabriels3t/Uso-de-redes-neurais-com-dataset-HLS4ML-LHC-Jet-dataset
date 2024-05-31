@@ -1,0 +1,14 @@
+
+class Classification(nn.Module):
+  def __init__(self,entrada):
+    super().__init__()
+
+
+    self.layers = nn.Sequential(
+        nn.Linear(entrada,10),
+        nn.ReLU(),
+        nn.Linear(10,1),
+        nn.Sigmoid()
+    )
+  def forward(self,x):
+    return self.layers(x)

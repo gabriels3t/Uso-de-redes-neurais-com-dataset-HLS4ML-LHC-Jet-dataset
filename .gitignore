@@ -8,3 +8,4 @@
 /teste.py
 data/teste.pt
 data/treino.pt
+model/*.pth
