@@ -4,10 +4,8 @@ import pandas as pd
 import os
 from tqdm import tqdm
 import torch
+import util
 
-def adicionando_lista(dirs, files):
-    diretorio = dirs + "/"
-    return [diretorio + file_name for file_name in files]
 
 def loadfiles_np(listOfFiles, maxFiles=-1):
     listofDf = []
@@ -16,19 +14,6 @@ def loadfiles_np(listOfFiles, maxFiles=-1):
             tmpDf = np.array(f.get("jetImageHCAL"))
             listofDf.append(tmpDf)
     return np.stack(listofDf)
-
-def carregar_dados(path):
-    paths = []
-    cont = 0
-    for dirs, _, files in os.walk(path):
-        if cont == 1:
-            print(f'Adicionando os dados de {dirs[-4:]} na lista ')
-            paths.append(adicionando_lista(dirs, files))
-        if cont == 2:
-            print(f'Adicionando os dados de {dirs[-5:]} na lista ')
-            paths.append(adicionando_lista(dirs, files))
-        cont += 1
-    return paths
 
 def salvar_numpy_array(dados, caminho):
     with open(caminho, 'wb') as f:
@@ -76,7 +61,7 @@ def salvar_tensor_csv(csv_path, tensor_path, dtypes):
 
 
 # Executando
-path_train, path_test = carregar_dados("data")
+path_train, path_test = util.carregar_dados("data")
 
 juntar_dados_imagem_alvo(path_test, "data/target_test_raw.csv", 'data/teste.csv')
 

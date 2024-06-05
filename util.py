@@ -1,5 +1,6 @@
 import os
 import sys
+import torch
 
 def adicionando_lista(dirs, files):
     diretorio = dirs + "/"
@@ -18,8 +19,7 @@ def carregar_dados(path):
         cont += 1
     return paths
 
-def salvar_tensor_csv(csv_path, tensor_path, dtypes):
-    data = pd.read_csv(csv_path, dtype=dtypes)
+def salvar_tensor_csv(data, tensor_path):
     tensor_data = torch.tensor(data.values, dtype=torch.float32)
     torch.save(tensor_data, tensor_path)
-    print(f"{csv_path} convertido para tensor e salvo em {tensor_path}")
+    print(f"Tensoe salvo em {tensor_path}")
