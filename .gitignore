@@ -6,6 +6,5 @@
 /roc_treino.png
 /script.py
 /teste.py
-data/teste.pt
-data/treino.pt
+data/*.pt
 model/*.pth
