@@ -33,12 +33,4 @@ Apos a execução os dados vão ser retornados para a pasta "data".
 ## Tratamento para o Dataset das 30 Partículas 
 Para o uso do Dataset com 30 partículas é mais simples, baixe os dados e coloque na pasta "data",apos isso baixe o script "util.py", pronto! agora basta executar:<br>
 <code> python3 tratamento_dados_30particulas.py </code> <br>
-<<<<<<< HEAD
-<<<<<<< HEAD
 Apos a execução os dados vão ser retornados para a pasta "data".
-=======
-Apos a execução os dados vão ser retornados para a pasta "data".
->>>>>>> 1dc3bb01cd67cd301eb1eebfcc77bd3392df2802
-=======
-Apos a execução os dados vão ser retornados para a pasta "data".
->>>>>>> 1dc3bb01cd67cd301eb1eebfcc77bd3392df2802
