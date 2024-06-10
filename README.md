@@ -10,7 +10,7 @@ O dataset é configurado entre 3 modos:
 </ol>
 
 # Obtendo os Dados para o Treinamento do Modelo 
-Foi utilizado os dados de imagens e lista constituinte de 30 partículas.<br>
+Foi utilizado os dados dos itens 2 e 3 .<br>
 Por se tratar de vários arquivos  em .h5, foi criado scripts em Python como forma de tratar os dados e rearranjar todos os .h5 para apenas um arquivo .pt, que é um binário em Pytorch que facilita na economia de memória tanto em disco, quanto em memória ram.
 <br>
 ### Instalando as Bibliotecas  
