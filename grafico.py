@@ -59,7 +59,7 @@ minval = [-1000, -1000, -1000, 0,0, 0., 0,  -np.pi, -2,-1.5,-np.pi,-0.6, -1, 0, 
 maxval = [ 1000,  1000,  1000,3500, 1,  1200,  1, np.pi, 1.4,1.5,np.pi, 0.6, 1, 2,1,0.75]
 
 featureNames = ['$p_{x}$ [Gev]', '$p_{y}$ [Gev]', '$p_{z}$ [Gev]', '$E$ [Gev]', 
-                'Relative~$E$ [Gev]', '$p_{T}$ [GeV]', 'Relative $p_{T}$ [GeV]',
+                'Relative $E$ [Gev]', '$p_{T}$ [GeV]', 'Relative $p_{T}$ [GeV]',
                  '$\eta$', 'Relative $\eta$', 'Rotated $\eta$', '$\phi$', 'Relative $\phi$',
                 'Rotated $\phi$', '$\\Delta R$', r'cos $\theta$', r'Relative cos $\theta$']
 

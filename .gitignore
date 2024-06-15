@@ -7,4 +7,5 @@
 /script.py
 /teste.py
 data/*.pt
-model/*.pth
+model/img/*.pth
+model/particula/*.pth
