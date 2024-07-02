@@ -9,3 +9,7 @@
 data/*.pt
 model/img/*.pth
 model/particula/*.pth
+requirementes2.txt
+requirements.txt
+otimizadores_output.txt
+teste_otimizacao.ipynb

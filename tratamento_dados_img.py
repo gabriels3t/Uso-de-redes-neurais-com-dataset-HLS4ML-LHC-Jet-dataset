@@ -1,76 +1,71 @@
 import h5py
 import numpy as np
 import pandas as pd
-import os
 from tqdm import tqdm
 import torch
 import util
 
+tqdm.monitor_interval = 0
 
-def loadfiles_np(listOfFiles, maxFiles=-1):
-    listofDf = []
-    for _, ifile in tqdm(enumerate(listOfFiles[:maxFiles]), total=maxFiles):
+def load_files(listOfFiles, file_name,maxFiles=-1):
+    listParticulas = np.array([])
+
+    for _, ifile in tqdm(enumerate(listOfFiles[:maxFiles]), desc='Processing',total=maxFiles):
         with h5py.File(ifile, "r") as f:
-            tmpDf = np.array(f.get("jetImageHCAL"))
-            listofDf.append(tmpDf)
-    return np.stack(listofDf)
+            particulas = np.array(f.get(file_name))
+            listParticulas = np.concatenate((listParticulas, particulas), axis=0) if listParticulas.size else particulas
+    
+    return listParticulas
 
-def salvar_numpy_array(dados, caminho):
-    with open(caminho, 'wb') as f:
-        np.save(f, dados)
+def preprocess_particles(imgP, data):
+    # Separando as partículas pela suas categorias 
+    list_q = np.array(imgP[data[:,-6]==1])
+    list_g = np.array(imgP[data[:,-5]==1])
+    list_W = np.array(imgP[data[:,-4]==1])
+    list_Z = np.array(imgP[data[:,-3]==1])
+    list_t = np.array(imgP[data[:,-2]==1])
+    
 
-def juntar_dados_imagem_alvo(path_imagens, target_csv, caminho_saida):
-    df_image = loadfiles_np(path_imagens, -1)
-    target_train = pd.read_csv(target_csv)
+    return list_q, list_g, list_Z, list_t, list_W
 
+def juntar_dados_imagem_alvo(p_img, boson_W):
     dfs_concatenados = []
-    TOTAL = df_image.shape[0]
-
+    
+    TOTAL = len(p_img)
+    print(f"Categorias: {TOTAL}")
     for j in range(TOTAL):
+        classe = 1 if p_img[j] is boson_W else 0
+        lista = p_img[j]
         resultados = []
-        LINHA = df_image[j].shape[0]
-
+        LINHA = len(lista)
+        print(LINHA)
         for i in range(LINHA):
-            resultados.append(df_image[j][i].astype('uint8').reshape(100, 100).flatten())
+            dados_array = lista[i].reshape(100, 100).flatten()
+            df_temp = pd.DataFrame(dados_array).T
+            df_temp["Classe"] = classe
+            dfs_concatenados.append(df_temp)
 
-        resultado = np.array(resultados)
-        treino = pd.DataFrame(resultado.reshape(LINHA,-1))
-
-        treino['Classe'] = target_train["j_w"]
-        target_train["j_w"] = target_train.iloc[LINHA:]
-        target_train = target_train.dropna().reset_index(drop=True)
-        dfs_concatenados.append(treino)
-
-    resultado_final = pd.concat(dfs_concatenados)
-    resultado_final.to_csv(caminho_saida)
-
-    isna = (resultado_final.isna().sum().sum()/10001)
-    print("Contagem de NaN em cada coluna:")
-    print(isna)
-
+    resultado_final = pd.concat(dfs_concatenados, ignore_index=True)
     return resultado_final
 
 
-def salvar_tensor_csv(csv_path, tensor_path, dtypes):
-    data = pd.read_csv(csv_path, dtype=dtypes)
-    tensor_data = torch.tensor(data.values, dtype=torch.float32)
-    torch.save(tensor_data, tensor_path)
-    print(f"{csv_path} convertido para tensor e salvo em {tensor_path}")
+def executando(path,caminho_saida):
+    data = load_files(path_train,'jetImage',-1)
+    print("imagens carregadas")
+    name_train = load_files(path_train,'jets',-1)
+    print("jatos carregados")
+    data_q, data_g,  data_Z, data_t,data_W = preprocess_particles(data, name_train)
+    data_P = np.array([data_q, data_g,  data_Z, data_t,data_W])
+    df= juntar_dados_imagem_alvo(data_P,data_W)
+    util.salvar_tensor_csv(df,caminho_saida)
+    print("Executado com sucesso !")
 
 
 
 
 # Executando
 path_train, path_test = util.carregar_dados("data")
-
-juntar_dados_imagem_alvo(path_test, "data/target_test_raw.csv", 'data/teste.csv')
-
-path_treino= "data/hcal_train.npy"  
-juntar_dados_imagem_alvo(path_train, "data/target_train_raw.csv", 'data/treino.csv')
-
-dtypes = {f'{i}': 'float32' for i in range(0, 10000)}
-dtypes['Unnamed: 0'] = 'int64'
-dtypes['Classe'] = 'int64'
-
-salvar_tensor_csv("data/treino.csv", "data/treino.pt", dtypes)
-salvar_tensor_csv("data/teste.csv", "data/teste.pt", dtypes)
+saida = "teste/treino.csv"
+executando(path_train,saida)
+saida = "teste/teste.csv"
+executando(path_test,saida)

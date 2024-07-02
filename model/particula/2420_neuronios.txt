@@ -1,0 +1,20 @@
+class MLPClassification(nn.Module):
+  def __init__(self,entrada):
+    super().__init__()
+    self.layers = nn.Sequential(
+        nn.Linear(entrada,1300),
+        nn.ReLU(),
+        nn.Linear(1300,700),
+        nn.ReLU(),
+        nn.Linear(700,350),
+        nn.ReLU(),
+        nn.Linear(350,200),
+        nn.ReLU(),
+        nn.Linear(200,50),
+        nn.ReLU(),
+        nn.Linear(50,1),
+        nn.Sigmoid()
+    )
+  def forward(self,x):
+    return self.layers(x)
+  
