@@ -4,13 +4,15 @@ import pandas as pd
 from tqdm import tqdm
 import torch
 import util
+import gc
 
 tqdm.monitor_interval = 0
 
 def load_files(listOfFiles, file_name,maxFiles=-1):
     listParticulas = np.array([])
 
-    for _, ifile in tqdm(enumerate(listOfFiles[:maxFiles]), desc='Processing',total=maxFiles):
+    total = len(listOfFiles[:maxFiles])
+    for _, ifile in tqdm(enumerate(listOfFiles[:maxFiles]), desc='Processing',total=total):
         with h5py.File(ifile, "r") as f:
             particulas = np.array(f.get(file_name))
             listParticulas = np.concatenate((listParticulas, particulas), axis=0) if listParticulas.size else particulas
@@ -48,24 +50,43 @@ def juntar_dados_imagem_alvo(p_img, boson_W):
     resultado_final = pd.concat(dfs_concatenados, ignore_index=True)
     return resultado_final
 
+def proporcao_teste(x):
+  return int((26*x)/60)
 
-def executando(path,caminho_saida):
-    data = load_files(path_train,'jetImage',-1)
-    print("imagens carregadas")
-    name_train = load_files(path_train,'jets',-1)
+def executando(path,caminho_saida,maxFiles):
+    name_train = load_files(path,'jets',maxFiles)
     print("jatos carregados")
+    data = load_files(path,'jetImage',maxFiles)
+    print("imagens carregadas")
     data_q, data_g,  data_Z, data_t,data_W = preprocess_particles(data, name_train)
+
+    del name_train
+    del data
+
     data_P = np.array([data_q, data_g,  data_Z, data_t,data_W])
     df= juntar_dados_imagem_alvo(data_P,data_W)
     util.salvar_tensor_csv(df,caminho_saida)
+    
+    # Liberar memória manualmente 
+    
+    del df
+    del data_q
+    del data_g
+    del data_Z
+    del data_t
+    del data_W
+    del data_P
+    
+    # Forçar a coleta de lixo
+    gc.collect()
     print("Executado com sucesso !")
 
 
 
-
 # Executando
+quantidade_arquivos = 60
 path_train, path_test = util.carregar_dados("data")
-saida = "teste/treino.csv"
-executando(path_train,saida)
-saida = "teste/teste.csv"
-executando(path_test,saida)
+saida = "data/treino.pt"
+executando(path_train,saida,quantidade_arquivos)
+saida = "data/teste.pt"
+executando(path_test,saida,proporcao_teste(quantidade_arquivos))

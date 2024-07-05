@@ -39,4 +39,6 @@ Para o uso do Dataset com 30 partículas é mais simples, baixe os dados e coloq
 <code> python3 tratamento_dados_30particulas.py </code> <br>
 Apos a execução os dados vão ser retornados para a pasta "data".
 
+## Observação:
+Se ocorrer um erro de "kill" ao tentar executar os scripts acima, é aconselhável reduzir o número de arquivos sendo processados. Para fazer isso, basta abrir o arquivo "tratamento_dados_30particulas.py" ou "tratamento_dados_img.py" e diminuir o valor da variável "quantidade_arquivos".
 # Utilização dos modelos apresentados
