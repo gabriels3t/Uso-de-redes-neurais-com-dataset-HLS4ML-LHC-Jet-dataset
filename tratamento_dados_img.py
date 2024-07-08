@@ -9,12 +9,12 @@ import gc
 tqdm.monitor_interval = 0
 
 def load_files(listOfFiles, file_name,maxFiles=-1):
-    listParticulas = np.array([])
+    listParticulas = np.array([],dtype=np.float32)
 
     total = len(listOfFiles[:maxFiles])
     for _, ifile in tqdm(enumerate(listOfFiles[:maxFiles]), desc='Processing',total=total):
         with h5py.File(ifile, "r") as f:
-            particulas = np.array(f.get(file_name))
+            particulas = np.array(f.get(file_name),dtype=np.float32)
             listParticulas = np.concatenate((listParticulas, particulas), axis=0) if listParticulas.size else particulas
     
     return listParticulas
@@ -41,7 +41,7 @@ def juntar_dados_imagem_alvo(p_img, boson_W):
         resultados = []
         LINHA = len(lista)
         print(LINHA)
-        for i in range(LINHA):
+        for i in tqdm(range(LINHA)):
             dados_array = lista[i].reshape(100, 100).flatten()
             df_temp = pd.DataFrame(dados_array).T
             df_temp["Classe"] = classe
@@ -63,7 +63,7 @@ def executando(path,caminho_saida,maxFiles):
     del name_train
     del data
 
-    data_P = np.array([data_q, data_g,  data_Z, data_t,data_W])
+    data_P = np.array([data_q, data_g,  data_Z, data_t,data_W],dtype=object)
     df= juntar_dados_imagem_alvo(data_P,data_W)
     util.salvar_tensor_csv(df,caminho_saida)
     

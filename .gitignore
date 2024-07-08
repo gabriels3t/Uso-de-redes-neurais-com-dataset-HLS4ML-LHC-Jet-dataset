@@ -7,6 +7,8 @@
 /script.py
 /teste.py
 data/*.pt
+data/train
+data/val
 model/img/*.pth
 model/particula/*.pth
 requirementes2.txt

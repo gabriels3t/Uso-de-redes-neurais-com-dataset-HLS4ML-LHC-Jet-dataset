@@ -22,4 +22,4 @@ def carregar_dados(path):
 def salvar_tensor_csv(data, tensor_path):
     tensor_data = torch.tensor(data.values, dtype=torch.float32)
     torch.save(tensor_data, tensor_path)
-    print(f"Tensoe salvo em {tensor_path}")
+    print(f"Tensor salvo em {tensor_path}")
