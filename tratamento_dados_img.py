@@ -21,18 +21,17 @@ def load_files(listOfFiles, file_name,maxFiles=-1):
 
 def preprocess_particles(imgP, data):
     # Separando as partículas pela suas categorias 
-    list_q = np.array(imgP[data[:,-6]==1])
-    list_g = np.array(imgP[data[:,-5]==1])
-    list_W = np.array(imgP[data[:,-4]==1])
-    list_Z = np.array(imgP[data[:,-3]==1])
-    list_t = np.array(imgP[data[:,-2]==1])
+    list_q = np.array(imgP[data[:,-6]==1],dtype=np.float32)
+    list_g = np.array(imgP[data[:,-5]==1],dtype=np.float32)
+    list_W = np.array(imgP[data[:,-4]==1],dtype=np.float32)
+    list_Z = np.array(imgP[data[:,-3]==1],dtype=np.float32)
+    list_t = np.array(imgP[data[:,-2]==1],dtype=np.float32)
     
 
     return list_q, list_g, list_Z, list_t, list_W
 
 def juntar_dados_imagem_alvo(p_img, boson_W):
     dfs_concatenados = []
-    
     TOTAL = len(p_img)
     print(f"Categorias: {TOTAL}")
     for j in range(TOTAL):
@@ -86,7 +85,7 @@ def executando(path,caminho_saida,maxFiles):
 # Executando
 quantidade_arquivos = 60
 path_train, path_test = util.carregar_dados("data")
-saida = "data/treino.pt"
-executando(path_train,saida,quantidade_arquivos)
 saida = "data/teste.pt"
-executando(path_test,saida,proporcao_teste(quantidade_arquivos))
+executando(path_test,saida,quantidade_arquivos)
+saida = "data/treino.pt"
+executando(path_train,saida,proporcao_teste(quantidade_arquivos))
